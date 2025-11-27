@@ -3,6 +3,7 @@ import "./App.css";
 import VideoCard from "./components/VideoCard";
 import BottomNavbar from "./components/BottomNavbar";
 import TopNavbar from "./components/TopNavbar";
+import UploadInfo from "./components/UploadInfo";
 
 // This array holds information about different videos
 const videoUrls = [
@@ -62,6 +63,9 @@ const videoUrls = [
 function App() {
   const [videos, setVideos] = useState([]);
   const videoRefs = useRef([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showInfo, setShowInfo] = useState(false);
+  const infoTimeoutRef = useRef(null);
   const startY = useRef(null);
   const isDragging = useRef(false);
   const containerRef = useRef(null);
@@ -80,14 +84,16 @@ function App() {
     // This function handles the intersection of videos
     const handleIntersection = (entries) => {
       entries.forEach((entry) => {
+        const videoElement = entry.target;
         if (entry.isIntersecting) {
-          const videoElement = entry.target;
           // Play may return a promise that rejects if the user hasn't
           // interacted with the page yet — catch to avoid uncaught errors.
           const p = videoElement.play();
           if (p && p.catch) p.catch(() => {});
+          // try to read the index from a data attribute
+          const idx = parseInt(videoElement.dataset.index, 10);
+          if (!Number.isNaN(idx)) setCurrentIndex(idx);
         } else {
-          const videoElement = entry.target;
           videoElement.pause();
         }
       });
@@ -179,6 +185,10 @@ function App() {
       top: current + height,
       behavior: "smooth",
     });
+    // show upload info briefly when navigating
+    if (infoTimeoutRef.current) clearTimeout(infoTimeoutRef.current);
+    setShowInfo(true);
+    infoTimeoutRef.current = setTimeout(() => setShowInfo(false), 3000);
   };
 
   const scrollToPrevVideo = () => {
@@ -188,7 +198,23 @@ function App() {
       top: current - height,
       behavior: "smooth",
     });
+    if (infoTimeoutRef.current) clearTimeout(infoTimeoutRef.current);
+    setShowInfo(true);
+    infoTimeoutRef.current = setTimeout(() => setShowInfo(false), 3000);
   };
+
+  // Show info when user presses ArrowRight
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "ArrowRight") {
+        if (infoTimeoutRef.current) clearTimeout(infoTimeoutRef.current);
+        setShowInfo(true);
+        infoTimeoutRef.current = setTimeout(() => setShowInfo(false), 3000);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
 
   return (
     <div className="app">
@@ -208,11 +234,14 @@ function App() {
             url={video.url}
             profilePic={video.profilePic}
             setVideoRef={handleVideoRef(index)}
+            index={index}
             autoplay={index === 0}
           />
         ))}
         <BottomNavbar className="bottom-navbar" />
       </div>
+      {/* Upload info overlay */}
+      <UploadInfo video={videos[currentIndex]} visible={showInfo} />
     </div>
   );
 }

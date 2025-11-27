@@ -17,6 +17,7 @@ const VideoCard = (props) => {
     profilePic,
     setVideoRef,
     autoplay,
+    index,
   } = props;
   const videoRef = useRef(null);
 
@@ -38,6 +39,7 @@ const VideoCard = (props) => {
       <video
         className="player"
         onClick={onVideoPress}
+        data-index={index}
         ref={(ref) => {
           videoRef.current = ref;
           setVideoRef(ref);
