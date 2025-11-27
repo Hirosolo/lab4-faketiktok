@@ -125,3 +125,16 @@ html {
   padding: 5px;
   border-radius: 50%;
 }
+
+video {
+  pointer-events: none;
+  user-select: none;
+}
+
+.video-card {
+  user-select: none;
+}
+.container {
+  user-select: none;
+  -webkit-user-select: none;
+}

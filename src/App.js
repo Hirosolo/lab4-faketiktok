@@ -1,50 +1,57 @@
-import React, { useEffect, useState, useRef } from 'react';
-import './App.css';
-import VideoCard from './components/VideoCard';
-import BottomNavbar from './components/BottomNavbar';
-import TopNavbar from './components/TopNavbar';
+import React, { useEffect, useState, useRef } from "react";
+import "./App.css";
+import VideoCard from "./components/VideoCard";
+import BottomNavbar from "./components/BottomNavbar";
+import TopNavbar from "./components/TopNavbar";
 
 // This array holds information about different videos
 const videoUrls = [
   {
-    url: require('./videos/video1.mp4'),
-    profilePic: 'https://p16-sign-useast2a.tiktokcdn.com/tos-useast2a-avt-0068-giso/9d429ac49d6d18de6ebd2a3fb1f39269~c5_100x100.jpeg?x-expires=1688479200&x-signature=pjH5pwSS8Sg1dJqbB1GdCLXH6ew%3D',
-    username: 'csjackie',
-    description: 'Lol nvm #compsci #chatgpt #ai #openai #techtok',
-    song: 'Original sound - Famed Flames',
+    url: require("./videos/video1.mp4"),
+    profilePic:
+      "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2e4b2a2b-521c-4707-b16f-645b22f8c479/dfmosun-003ff67c-2e4c-48ae-a83a-5873209dd47f.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzJlNGIyYTJiLTUyMWMtNDcwNy1iMTZmLTY0NWIyMmY4YzQ3OVwvZGZtb3N1bi0wMDNmZjY3Yy0yZTRjLTQ4YWUtYTgzYS01ODczMjA5ZGQ0N2YuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Blln_ahbLc9cc2CJhrTQ3BsCJmN4HZV86PUQdNmxWf8",
+    username: "csjackie",
+    description: "Lol nvm #compsci #chatgpt #ai #openai #techtok",
+    song: "Original sound - Famed Flames",
     likes: 430,
     comments: 13,
     saves: 23,
     shares: 1,
   },
   {
-    url: require('./videos/video2.mp4'),
-    profilePic: 'https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/eace3ee69abac57c39178451800db9d5~c5_100x100.jpeg?x-expires=1688479200&x-signature=wAkVmwL7lej15%2B16ypSWQOqTP8s%3D',
-    username: 'dailydotdev',
-    description: 'Every developer brain @francesco.ciulla #developerjokes #programming #programminghumor #programmingmemes',
-    song: 'tarawarolin wants you to know this isnt my sound - Chaplain J Rob',
-    likes: '13.4K',
+    url: require("./videos/video2.mp4"),
+    profilePic:
+      "https://i.pinimg.com/736x/a6/84/42/a684423469f5f4f2de485cb9e10f457b.jpg",
+    username: "dailydotdev",
+    description:
+      "Every developer brain @francesco.ciulla #developerjokes #programming #programminghumor #programmingmemes",
+    song: "tarawarolin wants you to know this isnt my sound - Chaplain J Rob",
+    likes: "13.4K",
     comments: 3121,
     saves: 254,
     shares: 420,
   },
   {
-    url: require('./videos/video3.mp4'),
-    profilePic: 'https://p77-sign-va.tiktokcdn.com/tos-maliva-avt-0068/4e6698b235eadcd5d989a665704daf68~c5_100x100.jpeg?x-expires=1688479200&x-signature=wkwHDKfNuIDqIVHNm29%2FRf40R3w%3D',
-    username: 'wojciechtrefon',
-    description: '#programming #softwareengineer #vscode #programmerhumor #programmingmemes',
-    song: 'help so many people are using my sound - Ezra',
+    url: require("./videos/video3.mp4"),
+    profilePic:
+      "https://th.bing.com/th/id/OIP.SosMdPq_Pph_2wEJW2gouwHaHa?o=7&cb=ucfimg2rm=3&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3",
+    username: "wojciechtrefon",
+    description:
+      "#programming #softwareengineer #vscode #programmerhumor #programmingmemes",
+    song: "help so many people are using my sound - Ezra",
     likes: 5438,
     comments: 238,
     saves: 12,
     shares: 117,
   },
   {
-    url: require('./videos/video4.mp4'),
-    profilePic: 'https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/4bda52cf3ad31c728153859262c329db~c5_100x100.jpeg?x-expires=1688486400&x-signature=ssUbbCpZFJj6uj33D%2BgtcqxMvgQ%3D',
-    username: 'faruktutkus',
-    description: 'Wait for the end | Im RTX 4090 TI | #softwareengineer #softwareengineer #coding #codinglife #codingmemes ',
-    song: 'orijinal ses - Computer Science',
+    url: require("./videos/video4.mp4"),
+    profilePic:
+      "https://tse1.explicit.bing.net/th/id/OIP.lL0B6_oiduUOUFTzRozI3AHaH6?cb=ucfimg2ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3",
+    username: "faruktutkus",
+    description:
+      "Wait for the end | Im RTX 4090 TI | #softwareengineer #softwareengineer #coding #codinglife #codingmemes ",
+    song: "orijinal ses - Computer Science",
     likes: 9689,
     comments: 230,
     saves: 1037,
@@ -55,6 +62,9 @@ const videoUrls = [
 function App() {
   const [videos, setVideos] = useState([]);
   const videoRefs = useRef([]);
+  const startY = useRef(null);
+  const isDragging = useRef(false);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     setVideos(videoUrls);
@@ -63,7 +73,7 @@ function App() {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '0px',
+      rootMargin: "0px",
       threshold: 0.8, // Adjust this value to change the scroll trigger point
     };
 
@@ -72,7 +82,10 @@ function App() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const videoElement = entry.target;
-          videoElement.play();
+          // Play may return a promise that rejects if the user hasn't
+          // interacted with the page yet — catch to avoid uncaught errors.
+          const p = videoElement.play();
+          if (p && p.catch) p.catch(() => {});
         } else {
           const videoElement = entry.target;
           videoElement.pause();
@@ -80,7 +93,10 @@ function App() {
       });
     };
 
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+    const observer = new IntersectionObserver(
+      handleIntersection,
+      observerOptions
+    );
 
     // We observe each video reference to trigger play/pause
     videoRefs.current.forEach((videoRef) => {
@@ -98,9 +114,79 @@ function App() {
     videoRefs.current[index] = ref;
   };
 
+  // Mouse handler
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const threshold = 50; // drag distance in pixels
+    let lastScrollTime = 0;
+    const scrollCooldown = 600; // ms between automatic navigations
+
+    const handleMouseDown = (e) => {
+      isDragging.current = true;
+      startY.current = e.clientY;
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDragging.current || startY.current === null) return;
+
+      const deltaY = e.clientY - startY.current;
+      const now = Date.now();
+
+      if (deltaY < -threshold && now - lastScrollTime > scrollCooldown) {
+        scrollToNextVideo();
+        startY.current = e.clientY; // reset so user can continue dragging
+        lastScrollTime = now;
+      } else if (deltaY > threshold && now - lastScrollTime > scrollCooldown) {
+        scrollToPrevVideo();
+        startY.current = e.clientY;
+        lastScrollTime = now;
+      }
+    };
+
+    const handleMouseUp = () => {
+      isDragging.current = false;
+      startY.current = null;
+    };
+
+    container.addEventListener("mousedown", handleMouseDown);
+    container.addEventListener("mousemove", handleMouseMove);
+    container.addEventListener("mouseup", handleMouseUp);
+
+    // Also support leaving the container while dragging
+    container.addEventListener("mouseleave", handleMouseUp);
+
+    return () => {
+      container.removeEventListener("mousedown", handleMouseDown);
+      container.removeEventListener("mousemove", handleMouseMove);
+      container.removeEventListener("mouseup", handleMouseUp);
+      container.removeEventListener("mouseleave", handleMouseUp);
+    };
+  }, []);
+
+  // Handle scroll function
+  const scrollToNextVideo = () => {
+    const current = window.scrollY;
+    const height = window.innerHeight;
+    window.scrollTo({
+      top: current + height,
+      behavior: "smooth",
+    });
+  };
+
+  const scrollToPrevVideo = () => {
+    const current = window.scrollY;
+    const height = window.innerHeight;
+    window.scrollTo({
+      top: current - height,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className="app">
-      <div className="container">
+      <div className="container " ref={containerRef}>
         <TopNavbar className="top-navbar" />
         {/* Here we map over the videos array and create VideoCard components */}
         {videos.map((video, index) => (
@@ -123,7 +209,6 @@ function App() {
       </div>
     </div>
   );
-  
 }
 
 export default App;
