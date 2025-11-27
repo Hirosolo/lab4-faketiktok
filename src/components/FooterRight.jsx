@@ -12,11 +12,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./FooterRight.css";
 import { width } from "@fortawesome/free-solid-svg-icons/fa0";
+import ShareModal from "./ShareModal";
 
 function FooterRight({ likes, comments, saves, shares, profilePic, url }) {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const [userAddIcon, setUserAddIcon] = useState(faCirclePlus);
   const [muted, setMuted] = useState(false);
 
@@ -89,6 +91,10 @@ function FooterRight({ likes, comments, saves, shares, profilePic, url }) {
       }
     }
   };
+
+  const handleShareClick = () => {
+    setShowShare(true);
+  };
   return (
     <div className="footer-right">
       <div className="sidebar-icon">
@@ -158,6 +164,7 @@ function FooterRight({ likes, comments, saves, shares, profilePic, url }) {
         <FontAwesomeIcon
           icon={faShare}
           style={{ width: "35px", height: "35px", color: "white" }}
+          onClick={handleShareClick}
         />
         {/*displaying the number of shares */}
         <p>{shares}</p>
@@ -186,6 +193,13 @@ function FooterRight({ likes, comments, saves, shares, profilePic, url }) {
           />
         )}
       </div>
+
+      {/* Share modal */}
+      <ShareModal
+        visible={showShare}
+        onClose={() => setShowShare(false)}
+        videoUrl={url}
+      />
     </div>
   );
 }
