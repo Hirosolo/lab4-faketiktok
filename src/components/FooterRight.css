@@ -62,3 +62,12 @@
     transform: rotate(360deg);
   }
 }
+
+.copied-feedback {
+  margin-top: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}

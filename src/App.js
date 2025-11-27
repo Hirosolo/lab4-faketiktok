@@ -124,8 +124,12 @@ function App() {
     const scrollCooldown = 600; // ms between automatic navigations
 
     const handleMouseDown = (e) => {
+      // Only start drag on left mouse button
+      if (e.button !== 0) return;
       isDragging.current = true;
       startY.current = e.clientY;
+      // Prevent text selection while dragging
+      if (container && container.style) container.style.userSelect = "none";
     };
 
     const handleMouseMove = (e) => {
@@ -148,6 +152,7 @@ function App() {
     const handleMouseUp = () => {
       isDragging.current = false;
       startY.current = null;
+      if (container && container.style) container.style.userSelect = "";
     };
 
     container.addEventListener("mousedown", handleMouseDown);
@@ -162,6 +167,7 @@ function App() {
       container.removeEventListener("mousemove", handleMouseMove);
       container.removeEventListener("mouseup", handleMouseUp);
       container.removeEventListener("mouseleave", handleMouseUp);
+      if (container && container.style) container.style.userSelect = "";
     };
   }, []);
 

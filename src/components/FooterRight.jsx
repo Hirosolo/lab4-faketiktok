@@ -13,9 +13,10 @@ import {
 import "./FooterRight.css";
 import { width } from "@fortawesome/free-solid-svg-icons/fa0";
 
-function FooterRight({ likes, comments, saves, shares, profilePic }) {
+function FooterRight({ likes, comments, saves, shares, profilePic, url }) {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [userAddIcon, setUserAddIcon] = useState(faCirclePlus);
   const [muted, setMuted] = useState(false);
 
@@ -49,6 +50,44 @@ function FooterRight({ likes, comments, saves, shares, profilePic }) {
 
   const handleLikeClick = () => {
     setLiked((prevLiked) => !prevLiked);
+  };
+
+  // Cross-browser clipboard copy with fallback
+  const copyToClipboard = async (text) => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch (e) {
+      // fall through to fallback
+    }
+
+    // Fallback for older browsers
+    try {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  const handleSaveClick = async () => {
+    setSaved((s) => !s);
+    if (url) {
+      const ok = await copyToClipboard(url);
+      if (ok) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      }
+    }
   };
   return (
     <div className="footer-right">
@@ -99,18 +138,20 @@ function FooterRight({ likes, comments, saves, shares, profilePic }) {
           <FontAwesomeIcon
             icon={faBookmark}
             style={{ width: "35px", height: "35px", color: "#ffc107" }}
-            onClick={() => setSaved(false)}
+            onClick={handleSaveClick}
           />
         ) : (
           // Displaying the bookmark icon when not saved
           <FontAwesomeIcon
             icon={faBookmark}
             style={{ width: "35px", height: "35px", color: "white" }}
-            onClick={() => setSaved(true)}
+            onClick={handleSaveClick}
           />
         )}
         {/* Displaying the number of saves */}
         <p>{saved ? saves + 1 : saves}</p>
+        {/* small copied feedback */}
+        {copied ? <div className="copied-feedback">Copied!</div> : null}
       </div>
       <div className="sidebar-icon">
         {/* The share icon */}
