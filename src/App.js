@@ -62,6 +62,7 @@ const videoUrls = [
 
 function App() {
   const [videos, setVideos] = useState([]);
+  const [allVideos, setAllVideos] = useState([]);
   const videoRefs = useRef([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showInfo, setShowInfo] = useState(false);
@@ -72,7 +73,30 @@ function App() {
 
   useEffect(() => {
     setVideos(videoUrls);
+    setAllVideos(videoUrls);
   }, []);
+
+  // Search handler: filter by hashtag (e.g. '#compsci')
+  const handleSearch = (query) => {
+    if (!query) {
+      setVideos(allVideos);
+      setCurrentIndex(0);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const term = query.startsWith("#") ? query.slice(1) : query;
+    const lower = term.toLowerCase();
+
+    const filtered = allVideos.filter((v) => {
+      if (!v.description) return false;
+      return v.description.toLowerCase().includes("#" + lower);
+    });
+
+    setVideos(filtered);
+    setCurrentIndex(0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const observerOptions = {
@@ -105,9 +129,12 @@ function App() {
     );
 
     // We observe each video reference to trigger play/pause
-    videoRefs.current.forEach((videoRef) => {
-      observer.observe(videoRef);
-    });
+    // filter out nulls or non-elements to avoid observe() errors
+    videoRefs.current
+      .filter((r) => r && (r instanceof Element || r.nodeType === 1))
+      .forEach((videoRef) => {
+        observer.observe(videoRef);
+      });
 
     // We disconnect the observer when the component is unmounted
     return () => {
@@ -219,7 +246,7 @@ function App() {
   return (
     <div className="app">
       <div className="container " ref={containerRef}>
-        <TopNavbar className="top-navbar" />
+        <TopNavbar onSearch={handleSearch} />
         {/* Here we map over the videos array and create VideoCard components */}
         {videos.map((video, index) => (
           <VideoCard
